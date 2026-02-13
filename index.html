@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For My Love 💕</title>
+  <link rel="stylesheet" href="rue.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 id="intro"></h1>
+    <div class="heart" id="heart">❤️</div>
+
+    <div class="hidden-message" id="message-box">
+      <p id="message"></p>
+      <button id="next-btn" class="hidden">Next 💌</button>
+    </div>
+  </div>
+
+  <div class="floating-hearts">
+    <span>💖</span><span>💘</span><span>💕</span><span>💞</span><span>💗</span>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <!-- 💌 Secret Envelope -->
+  <div id="envelope" class="envelope hidden">
+    <div class="envelope-flap"></div>
+    <div class="envelope-body">
+      <div class="seal" id="seal">💌</div>
+      <div class="letter">
+        <h2>My Dearest Rue,</h2>
+        <p>
+          I know we’re not official yet, but one thing I’m sure of 
+          when that day finally comes, when I can proudly call you mine,
+          I won’t stop courting you.
+
+          I’ll still do the little things that make you smile,
+          still remind you how much you mean to me,
+
+          still make every day feel like the start of something beautiful.
+          Because my love for you, isn’t about reaching the end 
+          it’s about never stopping the effort to make you feel cherished. 🌸
+        </p>
+        <p>
+          Every time I see you smile, my heart feels like it’s home again.  
+          I love you endlessly now and always. 💞
+        </p>
+        <p>— Yours forever, 💋</p>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bg-music" src="music.mp3" preload="auto"></audio>
+
+  <script>
+    const intro = document.getElementById('intro');
+    const heart = document.getElementById('heart');
+    const messageBox = document.getElementById('message-box');
+    const message = document.getElementById('message');
+    const nextBtn = document.getElementById('next-btn');
+    const confetti = document.getElementById('confetti');
+    const music = document.getElementById('bg-music');
+    const envelope = document.getElementById('envelope');
+    const seal = document.getElementById('seal');
+
+    const messages = [
+      "💌 Hi baby! You found my secret heart!",
+      "You mean everything to me, my love. 🌙",
+      "I still can’t believe I get to call you mine every day. 💫",
+      "Even in silence, I feel you. You are my home. 🏡💞",
+      "You’ve changed my life in ways words can’t explain. 🥹💖",
+      "So here’s a little reminder: I’ll always love you, sincerely. 💋"
+    ];
+
+    let msgIndex = 0;
+    let heartClicks = 0;
+
+    // Type intro message
+    const introText = "Hey baby! 💖 Click my heart!";
+    let i = 0;
+    const typeIntro = setInterval(() => {
+      if (i < introText.length) {
+        intro.textContent += introText.charAt(i);
+        i++;
+      } else clearInterval(typeIntro);
+    }, 70);
+
+    heart.addEventListener('click', () => {
+      heart.classList.add('pop');
+      playMusic();
+      showMessage(messages[msgIndex]);
+      createConfetti();
+      setTimeout(() => heart.classList.remove('pop'), 700);
+      nextBtn.classList.remove('hidden');
+
+      heartClicks++;
+      if (heartClicks === 5) {
+        setTimeout(() => showEnvelope(), 1000);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      msgIndex++;
+      if (msgIndex < messages.length) {
+        showMessage(messages[msgIndex]);
+        createConfetti();
+      } else {
+        message.innerHTML = "💞 Thank you for loving me, i love you baby 💞";
+        nextBtn.classList.add('hidden');
+        messageBox.classList.add('glow');
+      }
+    });
+
+    seal.addEventListener('click', () => {
+      envelope.classList.add('open');
+      createConfetti();
+    });
+
+    function showMessage(text) {
+      messageBox.classList.add('show');
+      message.textContent = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          message.textContent += text.charAt(i);
+          i++;
+        } else clearInterval(interval);
+      }, 50);
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 20; i++) {
+        const span = document.createElement('span');
+        span.textContent = '💖';
+        span.classList.add('confetti-heart');
+        span.style.left = Math.random() * 100 + 'vw';
+        span.style.animationDuration = 3 + Math.random() * 2 + 's';
+        confetti.appendChild(span);
+        setTimeout(() => span.remove(), 4000);
+      }
+    }
+
+    function playMusic() {
+      music.volume = 0;
+      music.play().then(() => {
+        const fade = setInterval(() => {
+          if (music.volume < 0.5) music.volume += 0.05;
+          else clearInterval(fade);
+        }, 200);
+      }).catch(err => console.log(err));
+    }
+
+    function showEnvelope() {
+      envelope.classList.remove('hidden');
+      envelope.style.opacity = 1;
+      envelope.style.transform = "translate(-50%, -50%) scale(1)";
+      createConfetti();
+    }
+
+    document.addEventListener('mousemove', e => {
+      const trail = document.createElement('div');
+      trail.classList.add('trail-heart');
+      trail.style.left = e.pageX + 'px';
+      trail.style.top = e.pageY + 'px';
+      trail.textContent = '💗';
+      document.body.appendChild(trail);
+      setTimeout(() => trail.remove(), 1000);
+    });
+  </script>
+</body>
+</html>
